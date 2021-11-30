@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Local Storage</title>
+    <style type="text/CSS">
+        table {
+            width: 90%;
+            border-collapse: collapse;
+            background-color: lightblue;
+            font-family: Perpetua;
+        }
+
+        table, td, th {
+            border: 1px solid black;
+            padding: 4px;
+        }
+
+        th {
+            text-align: center;
+            color: white;
+            background-color: darkblue;
+        }
+
+        tr.oddrow {
+            background-color: white;
+        }
+
+        td {
+            text-align: center;
+        }
+    </style>
+    <script type="text/javascript">
+    var table="<table><tr><th>Title</th><th>Author</th><th>Year</th><th>URL</th></tr>";
+    var op="";
+        function start()
+        {
+            var add=document.getElementById("addButton");
+            add.addEventListener("click",add1,"false");
+            var remove=document.getElementById("removeAllButton");
+            remove.addEventListener("click",remove1,"false");
+            settable();
+        }
+        function settable()
+        {
+            op=table;
+            for(let i=0;i<localStorage.length; i++)
+            {
+                let temp = JSON.parse(localStorage.getItem(localStorage.key(i)));
+                op += "<tr><td>" + temp.title + "</td><td>" + temp.author + "</td><td>" + temp.year + "</td><td><a href = '" + temp.url + "'' target = '_blank'>" + temp.url + "</a></td></tr>";
+            }
+            op += "</table>";
+            var display = document.getElementById("display");
+            display.innerHTML = op;
+        }
+        function add1()
+        {
+            var obj={"title":document.getElementById("book").value,"author":document.getElementById("author").value,"year":document.getElementById("year").value,"url":document.getElementById("url").value};
+            var JSONA=JSON.stringify(obj);
+            var Key="ntou-"+new Date().getTime();
+            localStorage.setItem(Key,JSONA);
+            settable();
+        }
+        function remove1()
+        {
+            localStorage.clear();
+            op=table;
+            document.getElementById("display").innerHTML=op;
+            alert("All items were removed!");
+        }
+        window.addEventListener("load",start,false);
+    </script>
+</head>
+
+<body>
+    <form action="#">
+        <p>
+            <label>Book Title:<input type="text" id="book"></label>
+            <label>Author(s):<input type="text" id="author"></label>
+            <label>Year:<input type="number" id="year"></label>
+            <label>Book URL:<input type="url" id="url"></label>
+        </p>
+        <p>
+            <input type="button" value="Add New Item" id="addButton">
+            <input type="button" value="Remove All Items" id="removeAllButton">
+        </p>
+    </form>
+    <hr>
+    <div id="display">
+    </div>
+</body>
+
+</html>
